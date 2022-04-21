@@ -1,30 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public float moveSpeed;
-    Vector2 movement;
-    IEnemyBattleController enemyBattleController;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private int _damage;
+    private Vector2 _movement;
+    private IEnemyBattleController _enemyBattleController; //For constructing battle
+    public event System.Action<int> GetDamage;
 
-    [SerializeField] public GameObject leftArrow;
-    [SerializeField] public GameObject rightArrow;
-    [SerializeField] public GameObject upArrow;
-    [SerializeField] public GameObject downArrow;
 
+    [SerializeField] protected GameObject leftArrow;
+    [SerializeField] protected GameObject rightArrow;
+    [SerializeField] protected GameObject upArrow;
+    [SerializeField] protected GameObject downArrow;
+
+    //public Enemy(Vector3 spawnZone)
+    //{
+    //    this.spawnZone = spawnZone;
+    //}
+    private void Awake()
+    {
+        _enemyBattleController = GetComponent<IEnemyBattleController>();
+    }
     // Start is called before the first frame update
     void Start()
     {
         if (moveSpeed != 0)
         {
-            movement.x = moveSpeed;
+            _movement.x = moveSpeed;
         }
         else
         {
-            movement.x = -5;
+            _movement.x = -5;
         }
+        Debug.Log("EnemySuccess");
+    }
+    private void OnEnable()
+    {
+        _enemyBattleController.OnArrowDestroyed += Punch;
+    }
+    private void OnDisable()
+    {
+        _enemyBattleController.OnArrowDestroyed += Punch;
     }
 
     // Update is called once per frame
@@ -32,55 +50,24 @@ public class Enemy : MonoBehaviour
     {
 
     }
+    //Movement - move an enemy at one side left or right
     void Movement()
     {
-        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + _movement * Time.fixedDeltaTime);
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        StartCoroutine(_enemyBattleController.SpawnArrows(leftArrow, rightArrow, upArrow, downArrow));
+        _movement.x = -1;
     }
     private void FixedUpdate()
     {
         Movement();
+        _enemyBattleController.DetectWinBattle(gameObject);
     }
-}
-internal interface IEnemyBattleController
-{
-    public IEnumerator Battle(GameObject leftArrow, GameObject rightArrow, GameObject upArrow, GameObject downArrow);
-}
-
-internal class SkeletBattleController : MonoBehaviour, IEnemyBattleController
-{
-    [SerializeField] public List<float> arrowDelay;
-    [SerializeField] public List<int> arrowOrder;
-    public IEnumerator Battle(GameObject leftArrow, GameObject rightArrow, GameObject upArrow, GameObject downArrow)
+    public void Punch(bool arrowStatus)
     {
-        for(int i = 0; i < arrowOrder.Count; i++)
-        {
-            if(arrowOrder[i] <= 0)
-            {
-                switch (arrowOrder[i])
-                {
-                    case 0:
-                        GameObject.Instantiate(upArrow);
-                        break;
-                    case 1:
-                        GameObject.Instantiate(downArrow);
-                        break;
-                    case 2:
-                        GameObject.Instantiate(leftArrow);
-                        break;
-                    case 3:
-                        GameObject.Instantiate(rightArrow);
-                        break;
-                }
-            }
-            if (arrowDelay[i] <= 0)
-            {
-               yield return new WaitForSeconds(arrowDelay[i]/10);
-            }
-            yield return new WaitForSeconds(0);
-        }
+        if (!arrowStatus) GetDamage.Invoke(_damage);
     }
 }
