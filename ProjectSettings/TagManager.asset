@@ -7,6 +7,10 @@ TagManager:
   - ArrowSpawnZone
   - KeyPressedLocation
   - ArrowDestroyLocation
+  - ButtonUp
+  - ButtonDown
+  - ButtonLeft
+  - ButtonRight
   layers:
   - Default
   - TransparentFX
