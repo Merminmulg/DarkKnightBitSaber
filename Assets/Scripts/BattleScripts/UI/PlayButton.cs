@@ -2,28 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class ButtonMobile : MonoBehaviour
+public class PlayButton : MonoBehaviour
 {
+    // Start is called before the first frame update
     [SerializeField] private Sprite _firstForm;
     [SerializeField] private Sprite _secondForm;
     [SerializeField] private Image _image;
-    // Start is called before the first frame update
-    private bool _isActivate = false;
-    public void ButtonClick()
+    [SerializeField] private GameObject _pauseMenuUI;
+    private void Start()
     {
-        if(!_isActivate) StartCoroutine(ButtonActivity());
+        gameObject.SetActive(false);
     }
-    public bool IsActivate()
+    public void OnPlay()
     {
-        return _isActivate;
+        StartCoroutine(ButtonActivity());
     }
     private IEnumerator ButtonActivity()
     {
-        _isActivate = true;
+        Time.timeScale = 1.0f;
         _image.sprite = _secondForm;
         yield return new WaitForSeconds(0.1f);
         _image.sprite = _firstForm;
-        _isActivate = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

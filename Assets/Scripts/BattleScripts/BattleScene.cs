@@ -17,8 +17,8 @@ public class BattleScene : MonoBehaviour
     [SerializeField] private float _autoSpawnDelay = 15f;
 
     [SerializeField] private Hero _hero;
-
-    [SerializeField] private GameObject GameOverTitle;
+    [SerializeField] private PlayButton _playButton;
+    [SerializeField] private GameObject _GameOverTitle;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +33,7 @@ public class BattleScene : MonoBehaviour
         {
             StartCoroutine(InfinitySpawnRandomEnemies());
         }
-        GameOverTitle.SetActive(false);
+        _GameOverTitle.SetActive(false);
     }
 
     // Update is called once per frame
@@ -51,7 +51,8 @@ public class BattleScene : MonoBehaviour
     }
     private void EndGame()
     {
-        GameOverTitle.SetActive(true);
+        _playButton.gameObject.SetActive(true);
+        _GameOverTitle.SetActive(true);
         Time.timeScale = 0f;
     }
     public IEnumerator SpawnEnemies()
@@ -75,7 +76,7 @@ public class BattleScene : MonoBehaviour
             _enemies.Last().GetComponent<Enemy>().GetDamage += _hero.ApplyDamage;
             _enemies.Last().GetComponent<Enemy>().HeroAction += _hero.Action;
             _enemies.Last().GetComponent<Enemy>().SetAnimation += _hero.SetAnimationSpeed;
-            _enemies.Last().GetComponent<Enemy>().OnKilled += _pointsView.EnemyKilled;
+            _enemies.Last().GetComponent<Enemy>().OnArrowDestroied += _pointsView.EnemyKilled;
             yield return new WaitForSeconds(_autoSpawnDelay);
         }
     }

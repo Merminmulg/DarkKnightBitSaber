@@ -3,12 +3,15 @@ using TMPro;
 
 public class PointView : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI textView;
-    int points = 0;
+    [SerializeField] private TextMeshProUGUI _textView;
+    [SerializeField] private TextMeshProUGUI _comboView;
+    private int _points = 0;
+    private int _comboPoints;
     // Start is called before the first frame update
     void Start()
     {
-        points = 0;
+        _points = 0;
+        _comboPoints = 0;
     }
 
     // Update is called once per frame
@@ -17,9 +20,18 @@ public class PointView : MonoBehaviour
         
     }
 
-    public void EnemyKilled()
+    public void EnemyKilled(bool combo)
     {
-        points++;
-        textView.text = points.ToString();
+        if (combo)
+        {
+            _comboPoints++;
+        }
+        else
+        {
+            _comboPoints = 0;
+        }
+        _points += 10 * _comboPoints;
+        _textView.text = _points.ToString();
+        _comboView.text = _comboPoints.ToString();
     }
 }

@@ -12,6 +12,8 @@ public class Hero : MonoBehaviour
     [SerializeField] private int _maxHealt;
     public bool isAlive = true;
 
+    [SerializeField] private Hero_Audio _heroAudioSource;
+
     private List<float> _animationSpeed = null;
     public int MaxHealth{ get { return _maxHealt; } }
     private Animator _heroAnimator;
@@ -61,6 +63,7 @@ public class Hero : MonoBehaviour
         _heroAnimator.SetFloat("AnimationSpeed", test);
         _animationSpeed.Remove(_animationSpeed.First());
         _heroAnimator.SetBool("Hurt", true);
+        _heroAudioSource.ActiveVoice(0);
         yield return new WaitForSeconds(0f);
         _heroAnimator.SetBool("Hurt", false);
     }
@@ -70,9 +73,16 @@ public class Hero : MonoBehaviour
         _heroAnimator.SetFloat("AnimationSpeed", test);
         _animationSpeed.Remove(_animationSpeed.First());
         _heroAnimator.SetInteger("KeyPressedAction", animationNumber);
+        _heroAudioSource.ActiveVoice(animationNumber);
         yield return new WaitForSeconds(0f);
         _heroAnimator.SetInteger("KeyPressedAction", 0);
     }
+    /*
+     1 - Attack1
+     2 - Attack2
+     3 - Attack3
+     4 - Block
+     */
     // Update is called once per frame
     void Update()
     {

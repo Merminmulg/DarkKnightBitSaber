@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public IEnemyBattleController enemyBattleController; //For constructing battle
     public event System.Action<int> GetDamage;
     public event System.Action<List<float>> SetAnimation;
-    public event System.Action OnKilled;
+    public event System.Action<bool> OnArrowDestroied;
     public Animator animator;
     public event System.Action<int> HeroAction;
     static public float speedModificator = 1f;
@@ -112,7 +112,6 @@ public class Enemy : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         speedModificator = 1;
-        OnKilled.Invoke();
     }
     private void FixedUpdate()
     {
@@ -132,6 +131,7 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(HurtAnimation());
             }
         }
+        OnArrowDestroied.Invoke(arrowStatus);
     }
     private IEnumerator HurtAnimation()
     {

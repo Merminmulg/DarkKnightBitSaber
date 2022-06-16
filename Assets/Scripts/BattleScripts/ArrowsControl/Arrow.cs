@@ -113,11 +113,19 @@ public class Arrow : MonoBehaviour
                         _status = true;
                         DestroyArrow();
                     }
+                    if(downButton.IsActivate() || leftButton.IsActivate() || rightButton.IsActivate())
+                    {
+                        DestroyArrow();
+                    }
                     break;
                 case 1:
                     if (downButton.IsActivate())
                     {
                         _status = true;
+                        DestroyArrow();
+                    }
+                    if (upButton.IsActivate() || leftButton.IsActivate() || rightButton.IsActivate())
+                    {
                         DestroyArrow();
                     }
                     break;
@@ -127,11 +135,19 @@ public class Arrow : MonoBehaviour
                         _status = true;
                         DestroyArrow();
                     }
+                    if (upButton.IsActivate() || downButton.IsActivate() || rightButton.IsActivate())
+                    {
+                        DestroyArrow();
+                    }
                     break;
                 case 3:
                     if (rightButton.IsActivate())
                     {
                         _status = true;
+                        DestroyArrow();
+                    }
+                    if (upButton.IsActivate() || downButton.IsActivate() || leftButton.IsActivate())
+                    {
                         DestroyArrow();
                     }
                     break;
