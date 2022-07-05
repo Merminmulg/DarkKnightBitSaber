@@ -23,6 +23,8 @@ public class Arrow : MonoBehaviour
      */
     private Vector2 _movement;
     private bool _inZone = false;
+    private bool _inZoneOne = false;
+    private bool _inZoneTwo = false;
     [SerializeField] private int _direction;
     
     // Start is called before the first frame update
@@ -47,10 +49,17 @@ public class Arrow : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "KeyPressedLocation") 
-            {
-            _inZone = true;
-            return;
+        switch (collision.tag)
+        {
+            case "KeyPressedLocation":
+                _inZone = true;
+                break;
+            case "KeyLocOne":
+                _inZoneOne = true;
+                break;
+            case "KeyLocTwo":
+                _inZoneTwo = true;
+                break; 
         }
         if (collision.tag == "ArrowDestroyLocation")
         {

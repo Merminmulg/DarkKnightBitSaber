@@ -11,6 +11,8 @@ TagManager:
   - ButtonDown
   - ButtonLeft
   - ButtonRight
+  - KeyLocOne
+  - KeyLocTwo
   layers:
   - Default
   - TransparentFX
